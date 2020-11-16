@@ -1,4 +1,7 @@
-from flask import Flask, request
+from pathlib import Path
+
+from flask import Flask, request, render_template
+
 
 app = Flask(__name__)
 
@@ -7,8 +10,16 @@ def get_app_secret(app_name: str) -> str:
     """
     get the secret of the app
     """
-    # todo: actually get the secret of the app
-    return "123456abc"
+    # todo: actually get the secret of the app from server
+    secret_key_file = Path(Path(app_name).parents[0], Path(app_name).stem).with_suffix(
+        ".key"
+    )
+
+    f = open(secret_key_file)
+    real_key = f.read()
+    return real_key
+
+
 
 
 def get_secret() -> str:
@@ -28,19 +39,26 @@ def get_secret() -> str:
     return secret_content
 
 
+
+
+
 @app.route('/<app_name>', methods=["POST"])
-def hello_world(app_name):
-    received_secret = get_secret()
+def secret_assert(app_name):
+    received_secret = get_secret()      #The secret received from the POST request
 
-    real_secret = get_app_secret(app_name)
+    real_secret = get_app_secret(app_name)  #The secret stored in the server exp. /opt/secret
 
-    if real_secret == received_secret:
-        result = "secret is correct! app deployed!"
-    else:
-        result = "secret is incorrect!"
+    # if real_secret == received_secret:
+    #     result = "secret is correct! app deployed!"
+    # else:
+    #     result = "secret is incorrect!"
+    #
+    # return result
 
-    return result
+    return render_template('result.html', real_secret=real_secret, received_secret=received_secret)
+
 
 
 if __name__ == '__main__':
+
     app.run()
