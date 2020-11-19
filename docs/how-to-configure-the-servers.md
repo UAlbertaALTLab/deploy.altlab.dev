@@ -38,9 +38,7 @@ an SSH key pair.
 
 We'll call this user **`deploy`**.
 
-<aside>
-In hindsight, a more descriptive user name would have been `deploy-host`.
-</aside>
+> In hindsight, a more descriptive user name would have been `deploy-host`.
 
 
 #### Create a system user called `deploy`
@@ -48,7 +46,7 @@ In hindsight, a more descriptive user name would have been `deploy-host`.
 ```sh
 sudo useradd --system \
     --create-home --home /var/lib/deploy \
-    --shell $(which nologin) \
+    --shell "$(which nologin)" \
     deploy
 ```
 
@@ -58,9 +56,8 @@ where state information for packages is stored in Linux][fhs-var-lib].
 [fhs-var-lib]: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s08.html
 
 The shell is `nologin`, which, as its name implies, forbids the user
-from logging in. Indeed, system users do not have valid passwords.
-`nologin` will also write a log entry in `/var/log/auth.log` of any
-attempts to login with this account.
+from logging in. `nologin` will also write a log entry in
+`/var/log/auth.log` of any attempts to login with this account.
 
 Then how will the `deploy` user authenticate themselves via SSH?
 
@@ -84,12 +81,14 @@ sudo chown deploy:deploy $DEPLOYHOME/.ssh
 
 Now create the SSH key pair in this folder:
 
-```
+```sh
 sudo -u deploy ssh-keygen -C "deploy@$HOST" -N '' -f $DEPLOYHOME/.ssh/id_rsa
 ```
 
 This creates a new password-less (`-N ''`) RSA key pair in
-`$DEPLOYHOME/.ssh/id_rsa`. You may now view the public key:
+`$DEPLOYHOME/.ssh/id_rsa`. `-C` sets a useful comment in the public key
+that we can use to distinguish logins in an `authorized_keys` file. You
+may now view the public key:
 
 ```sh
 sudo cat $DEPLOYHOME/.ssh/id_rsa.pub
