@@ -1,8 +1,8 @@
 // Created with <https://sequencediagram.org/>
 actor Developer
-fontawesome f09b GitHub
-fontawesome f0ac deploy.altlab.dev
-fontawesome f233 " altlab-* " as altlab-x
+participant GitHub
+participant deploy.altlab.dev
+participant " altlab-* " as altlab-x
 
 autoactivation on
 Developer->>GitHub:git push
@@ -10,9 +10,14 @@ GitHub->GitHub:build Docker image
 space
 GitHub<<--GitHub:{appname}@latest
 GitHub->deploy.altlab.dev:POST /{appname}
+deploy.altlab.dev->deploy.altlab.dev:authenticate secret key
+space
+deactivateafter deploy.altlab.dev
 deploy.altlab.dev->altlab-x:ssh deploy@altlab-{name} docker-compose up
 altlab-x->GitHub:docker pull {appname}@latest
 GitHub-->>altlab-x:Docker Image
 altlab-x->altlab-x:restart Docker container
+space
+deactivateafter altlab-x
 deploy.altlab.dev<<--altlab-x:
 GitHub<<--deploy.altlab.dev: 200 OK
