@@ -2,6 +2,9 @@ from pathlib import Path
 
 from flask import Flask, request, render_template
 
+from subprocess import call
+
+import os
 
 app = Flask(__name__)
 
@@ -39,7 +42,9 @@ def get_secret() -> str:
     return secret_content
 
 
-
+@app.route('/')
+def hello_world():
+   return "deploy.altlab.dev is running!"
 
 
 @app.route('/<app_name>', methods=["POST"])
@@ -48,17 +53,30 @@ def secret_assert(app_name):
 
     real_secret = get_app_secret(app_name)  #The secret stored in the server exp. /opt/secret
 
-    # if real_secret == received_secret:
-    #     result = "secret is correct! app deployed!"
-    # else:
-    #     result = "secret is incorrect!"
-    #
-    # return result
+    if real_secret == received_secret:
+        env = os.getenv("FLASK_ENV")
+        if env == "development":
+            call(["ssh","altlab.dev","ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
+            # call(["ssh", "altlab.dev", "ssh", "deploy@altlab-itw", "docker", "pull",
+            #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
+            #       "hello.altlab.service"])
+        else:
+            call(["ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","systemctrl","restart","hello.altlab.service"])
 
-    return render_template('result.html', real_secret=real_secret, received_secret=received_secret)
 
+        result = "secret is correct! app deployed!"
+    else:
+        result = "secret is incorrect!"
+
+    return result
+
+
+
+
+# sysremctl restart hello.altlab.service
 
 
 if __name__ == '__main__':
 
     app.run()
+
