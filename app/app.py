@@ -61,7 +61,7 @@ def secret_assert(app_name):
             #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
             #       "hello.altlab.service"])
         else:
-            call(["ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","systemctrl","restart","hello.altlab.service"])
+            call(["ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
 
 
         result = "secret is correct! app deployed!"
