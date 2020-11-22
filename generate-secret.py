@@ -23,7 +23,7 @@ key_file = Path(sys.argv[1]).with_suffix(".key")
 key_file.write_text(secrets.token_urlsafe())
 
 try:
-    shutil.chown(key_file, user="www-data", group="www-data")
+    shutil.chown(key_file, user="deploy", group="deploy")
 except LookupError as e:
     # docs.python.org says shutil.chown is only available to Unix as of python 3.6
     # when it's tried on Windows, it always throws LookupError with message "no such user: 'xxx' "
@@ -32,7 +32,7 @@ except LookupError as e:
     # todo: figure out what's necessary on Windows.
     #   However since redeploy is very possibly to be used on Linux servers, this hardly matters.
     logger.error(e)
-    logger.error("Failed to change the owner of key file to www-data."
+    logger.error("Failed to change the owner of key file to deploy."
                  "Key file is created anyways.")
 
 key_file.chmod(0o400)
