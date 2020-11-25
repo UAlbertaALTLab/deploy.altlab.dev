@@ -6,6 +6,8 @@ from subprocess import call
 
 import os
 
+
+
 app = Flask(__name__)
 
 
@@ -49,6 +51,7 @@ def hello_world():
 
 @app.route('/<app_name>', methods=["POST"])
 def secret_assert(app_name):
+
     received_secret = get_secret()      #The secret received from the POST request
 
     real_secret = get_app_secret(app_name)  #The secret stored in the server exp. /opt/secret
@@ -56,12 +59,12 @@ def secret_assert(app_name):
     if real_secret == received_secret:
         env = os.getenv("FLASK_ENV")
         if env == "development":
-            call(["ssh","altlab.dev","ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
+            call(["ssh","altlab.dev","ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
             # call(["ssh", "altlab.dev", "ssh", "deploy@altlab-itw", "docker", "pull",
             #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
             #       "hello.altlab.service"])
         else:
-            call(["ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
+            call(["ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
 
 
         result = "secret is correct! app deployed!"
