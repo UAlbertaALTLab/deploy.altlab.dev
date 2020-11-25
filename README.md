@@ -17,3 +17,4 @@ Please see [How to configure the servers](./docs/how-to-configure-the-servers.md
 ## Notes about the production environment
 
 The docker service should restart all running containers when restarted. See <https://stackoverflow.com/a/18797089/6626414>
+
