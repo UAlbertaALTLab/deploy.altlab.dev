@@ -1,7 +1,6 @@
-from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from flask import Flask, request, render_template
+from flask import Flask, request
 
 from subprocess import call
 
@@ -9,15 +8,16 @@ import os
 
 import logging
 
-from logging import getLogger
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+logger.addHandler(ch)
 
-logger.setLevel(logging.INFO)
 
-handler = RotatingFileHandler("log_result.log", maxBytes=20,
-                              backupCount=1)
-logger.addHandler(handler)
+logger.debug("flask started")
+
 
 app = Flask(__name__)
 
