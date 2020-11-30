@@ -54,6 +54,8 @@ def get_secret() -> str:
     # we expect raw_secret looks like "secret=xxxxxx"
 
     start = "secret="
+    logger.debug("getting raw secret:")
+    logger.debug(raw_secret)
     if raw_secret.startswith(start):
         secret_content = raw_secret[len(start):]
     else:
