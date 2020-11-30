@@ -104,7 +104,7 @@ def secret_assert(app_name):
             #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
             #       "hello.altlab.service"])
         else:
-            call(["ssh","deploy@altlab-itw", "docker","pull","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
+            call(["ssh","deploy@altlab-itw", "docker", "pull", "docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest", "docker", "run", "docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
         # TODO: Configeration automation for docker login
         # Every image in GItHub packeges is associated with a user and a TOKEN. Usually it can be setup by automation, see an example here: https://github.com/UAlbertaALTLab/hellotest/blob/production/.github/workflows/test-and-publish.yml#L59-L70
         # The following command have to be run as user deploy before used for a new repository:
