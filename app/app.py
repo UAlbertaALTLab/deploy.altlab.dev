@@ -64,6 +64,19 @@ def get_secret() -> str:
     return secret_content
 
 
+@app.before_request
+def fix_transfer_encoding():
+    """
+    Sets the "wsgi.input_terminated" environment flag, thus enabling
+    Werkzeug to pass chunked requests as streams.  The gunicorn server
+    should set this, but it's not yet been implemented.
+    """
+
+    transfer_encoding = request.headers.get("Transfer-Encoding", None)
+    if transfer_encoding == u"chunked":
+        request.environ["wsgi.input_terminated"] = True
+
+
 @app.route('/')
 def hello_world():
    return "deploy.altlab.dev is running!"
