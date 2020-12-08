@@ -33,10 +33,12 @@ def get_app_secret(app_name: str) -> str:
     """
 
 
-    secret_key_file = (KEY_DIR / app_name).with_suffix(".key")
-    # secret_key_file = Path(Path(app_name).parents[0], Path(app_name).stem).with_suffix(
-    #     ".key"
-    # )
+    # Note: Pathlib.with_suffix function fails when `app_name` has periods in it
+    # as it strips the last suffix and changes it
+    # for example "hello.altlab.dev".with_suffix(".key") will evaluate to Path("hello.altlab.key")
+    # while what we want is actually Path("hello.altlab.dev.key")
+    # so we shouldn't use Pathlib.with_suffix here:
+    secret_key_file = Path((KEY_DIR / (app_name + ".key")))
 
     f = open(secret_key_file)
     real_key = f.read()
