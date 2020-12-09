@@ -65,6 +65,24 @@ def get_secret() -> str:
 
     return secret_content
 
+def get_port() -> str:
+    """
+    get port from request
+    """
+
+    raw_port = request.get_data().decode('utf-8')
+    # we expect raw_secret looks like "secret=xxxxxx"
+
+    start = "port="
+    logger.debug("getting raw port:")
+    logger.debug(raw_port)
+    if raw_port.startswith(start):
+        real_port = raw_port[len(start):]
+    else:
+        raise ValueError("The port of app expected in request data but not found")
+
+    return real_port
+
 
 @app.before_request
 def fix_transfer_encoding():
@@ -90,7 +108,7 @@ def secret_assert(app_name):
     logger.debug(os.environ)
 
     received_secret = get_secret()      #The secret received from the POST request
-
+    app_port = get_port()
     logger.debug(received_secret)
     logger.debug(app_name)
 
@@ -98,19 +116,29 @@ def secret_assert(app_name):
 
     logger.debug(real_secret)
 
-    if real_secret == received_secret:
+    app_list = ["hello.altlab.dev", "gunaha", "korp"]
 
-        if ENV == "development":
-            call(["ssh","altlab.dev","ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
-            # call(["ssh", "altlab.dev", "ssh", "deploy@altlab-itw", "docker", "pull",
-            #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
-            #       "hello.altlab.service"])
+    if real_secret == received_secret:
+        if app_name in app_list:
+
+            if ENV == "development":
+                call(["ssh","altlab.dev","ssh","deploy@altlab-itw","docker","pull","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest:latest","docker","run","--rm","docker.pkg.github.com/ualbertaaltlab/hellotest/hellotest"])
+                # call(["ssh", "altlab.dev", "ssh", "deploy@altlab-itw", "docker", "pull",
+                #       "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest", "systemctrl", "restart",
+                #       "hello.altlab.service"])
+            else:
+                call(["ssh", "deploy@altlab-itw",
+                      "docker", "pull", "docker.pkg.github.com/ualbertaaltlab/" + app_name + "/" + app_name + ":latest", "&&",
+                      "docker", "run", "--rm", "--name=" + app_name, "-d", "-p", app_port + ":" + app_port , "docker.pkg.github.com/ualbertaaltlab/" + app_name + "/" + app_name])
+                # call(["ssh","deploy@altlab-itw", "docker", "pull", "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","&&", "docker", "run", "--rm","--name=hellotest", "-d", "-p", "5000:5000", "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
+                # TODO: Configeration automation for docker login
+                # Every image in GItHub packeges is associated with a user and a TOKEN. Usually it can be setup by automation, see an example here: https://github.com/UAlbertaALTLab/hellotest/blob/production/.github/workflows/test-and-publish.yml#L59-L70
+                # The following command have to be run as user deploy before used for a new repository:
+                # cat /path/to/TOKEN.txt | docker login https://docker.pkg.github.com -u USERNAME --password-stdin
+
         else:
-            call(["ssh","deploy@altlab-itw", "docker", "pull", "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest:latest","&&", "docker", "run", "--rm","--name=hellotest", "-d", "-p", "5000:5000", "docker.pkg.github.com/ualbertaaltlab/hello.altlab.dev/hellotest"])
-        # TODO: Configeration automation for docker login
-        # Every image in GItHub packeges is associated with a user and a TOKEN. Usually it can be setup by automation, see an example here: https://github.com/UAlbertaALTLab/hellotest/blob/production/.github/workflows/test-and-publish.yml#L59-L70
-        # The following command have to be run as user deploy before used for a new repository:
-        # cat /path/to/TOKEN.txt | docker login https://docker.pkg.github.com -u USERNAME --password-stdin
+            raise NameError ("name" + app_name + "is not defined! Please see https://github.com/UAlbertaALTLab/deploy.altlab.dev/blob/master/docs/how-to-configure-the-servers.md")
+
 
         result = "secret is correct! app deployed!"
     else:

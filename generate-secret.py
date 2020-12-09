@@ -19,7 +19,10 @@ logger = logging.getLogger(__name__)
 
 app_name = Path("redeploy", sys.argv[1])
 # assert app_name.exists()
-key_file = Path(sys.argv[1]).with_suffix(".key")
+
+
+key_file = Path(sys.argv[1]+ ".key")
+print(sys.argv)
 key_file.write_text(secrets.token_urlsafe())
 
 try:
