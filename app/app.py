@@ -35,7 +35,7 @@ def get_app_secret(app_name: str) -> str:
 
     # Note: Pathlib.with_suffix function fails when `app_name` has periods in it
     # as it strips the last suffix and changes it
-    # for example "hello.altlab.dev".with_suffix(".key") will evaluate to Path("hello.altlab.key")
+    # for example Path("hello.altlab.dev").with_suffix(".key") will evaluate to Path("hello.altlab.key")
     # while what we want is actually Path("hello.altlab.dev.key")
     # so we shouldn't use Pathlib.with_suffix here:
     secret_key_file = Path((KEY_DIR / (app_name + ".key")))
