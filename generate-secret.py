@@ -22,7 +22,7 @@ app_name = Path("redeploy", sys.argv[1])
 
 
 key_file = Path(sys.argv[1]+ ".key")
-print(sys.argv)
+
 key_file.write_text(secrets.token_urlsafe())
 
 try:
