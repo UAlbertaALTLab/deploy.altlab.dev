@@ -2,10 +2,11 @@ import hmac
 import logging
 import os
 from pathlib import Path
-from subprocess import check_call
 from http import HTTPStatus
 
 from flask import Flask, request, abort
+
+from .commands import ConnectTo
 
 KEY_DIR = Path(__file__).parent / ".."
 
@@ -64,34 +65,23 @@ def deploy_app(app_name: str):
     logger.info(f"Accepted secret for {app_name}")
 
     if app_name == "korp-frontend-dev":
-        ConnectTo("kor.altlab.dev").run("/etc/docker/compose/korp/deploy")
+        ConnectTo("kor.altlab.dev").command("/etc/docker/compose/korp/deploy").run()
         logger.info("deployment done")
         return "deploy script completed successfully"
     elif app_name == "korp-frontend-prod":
-        ConnectTo("kor.altlab.dev").run("/etc/docker/compose/korp-prod/deploy")
+        ConnectTo("kor.altlab.dev").command(
+            "/etc/docker/compose/korp-prod/deploy"
+        ).run()
         logger.info("deployment done")
         return "deploy script completed successfully"
     elif app_name == "itwewina":
-        ConnectTo("itwewina@itw.altlab.dev").run(
+        ConnectTo("itwewina@itw.altlab.dev").command(
             "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
-        )
+        ).run()
         logger.info("deployment done")
         return "deploy script completed successfully"
 
     return "Secret accepted, but deploy mechanism not yet configured."
-
-
-class ConnectTo:
-    def __init__(self, server_name: str) -> None:
-        self.server_name = server_name
-
-    def command(self, *args) -> "ConnectTo":
-        self.command_args = args
-        return self
-
-    def run(self, *command) -> None:
-        self.command(command)
-        check_call(["ssh", self.server_name, *self.command_args])
 
 
 if __name__ == "__main__":
