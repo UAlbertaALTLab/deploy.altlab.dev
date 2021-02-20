@@ -8,6 +8,19 @@ from flask import Flask, request, abort
 
 from .commands import ConnectTo
 
+# Add/change the deployments here!
+DEPLOYMENTS = {
+    "korp-frontend-dev": ConnectTo("kor.altlab.dev").command(
+        "/etc/docker/compose/korp/deploy"
+    ),
+    "korp-frontend-prod": ConnectTo("kor.altlab.dev").command(
+        "/etc/docker/compose/korp-prod/deploy"
+    ),
+    "itwewina": ConnectTo("itwewina@itw.altlab.dev").command(
+        "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
+    ),
+}
+
 KEY_DIR = Path(__file__).parent / ".."
 
 app = Flask(__name__)
@@ -64,23 +77,10 @@ def deploy_app(app_name: str):
 
     logger.info(f"Accepted secret for {app_name}")
 
-    if app_name == "korp-frontend-dev":
-        ConnectTo("kor.altlab.dev").command("/etc/docker/compose/korp/deploy").run()
+    if command := DEPLOYMENTS.get(app_name):
+        command.run()
         logger.info("deployment done")
         return "deploy script completed successfully"
-    elif app_name == "korp-frontend-prod":
-        ConnectTo("kor.altlab.dev").command(
-            "/etc/docker/compose/korp-prod/deploy"
-        ).run()
-        logger.info("deployment done")
-        return "deploy script completed successfully"
-    elif app_name == "itwewina":
-        ConnectTo("itwewina@itw.altlab.dev").command(
-            "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
-        ).run()
-        logger.info("deployment done")
-        return "deploy script completed successfully"
-
     return "Secret accepted, but deploy mechanism not yet configured."
 
 
