@@ -39,7 +39,7 @@ def fix_transfer_encoding():
 
 
 @app.route("/<app_name>", methods=["POST"])
-def deploy_app(app_name):
+def deploy_app(app_name: str):
     # Attempt to prevent a path traversal attack:
     # (See: https://owasp.org/www-community/attacks/Path_Traversal)
     if ".." in app_name or "/" in app_name:
@@ -64,25 +64,29 @@ def deploy_app(app_name):
     logger.info(f"Accepted secret for {app_name}")
 
     if app_name == "korp-frontend-dev":
-        check_call(["ssh", "kor.altlab.dev", "/etc/docker/compose/korp/deploy"])
+        ConnectTo("kor.altlab.dev").run("/etc/docker/compose/korp/deploy")
         logger.info("deployment done")
         return "deploy script completed successfully"
     elif app_name == "korp-frontend-prod":
-        check_call(["ssh", "kor.altlab.dev", "/etc/docker/compose/korp-prod/deploy"])
+        ConnectTo("kor.altlab.dev").run("/etc/docker/compose/korp-prod/deploy")
         logger.info("deployment done")
         return "deploy script completed successfully"
     elif app_name == "itwewina":
-        check_call(
-            [
-                "ssh",
-                "itwewina@itw.altlab.dev",
-                "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy",
-            ]
+        ConnectTo("itwewina@itw.altlab.dev").run(
+            "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
         )
         logger.info("deployment done")
         return "deploy script completed successfully"
 
-    return "Secret accepted, but deploy mechanism not yet configured.\n"
+    return "Secret accepted, but deploy mechanism not yet configured."
+
+
+class ConnectTo:
+    def __init__(self, server_name: str) -> None:
+        self.server_name = server_name
+
+    def run(self, *command) -> None:
+        check_call(["ssh", self.server_name, *command])
 
 
 if __name__ == "__main__":
