@@ -85,8 +85,13 @@ class ConnectTo:
     def __init__(self, server_name: str) -> None:
         self.server_name = server_name
 
+    def command(self, *args) -> "ConnectTo":
+        self.command_args = args
+        return self
+
     def run(self, *command) -> None:
-        check_call(["ssh", self.server_name, *command])
+        self.command(command)
+        check_call(["ssh", self.server_name, *self.command_args])
 
 
 if __name__ == "__main__":
