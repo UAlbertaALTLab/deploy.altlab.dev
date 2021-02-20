@@ -6,19 +6,22 @@ from http import HTTPStatus
 
 from flask import Flask, request, abort
 
-from .commands import ConnectTo
+from .commands import ConnectTo, NotConfigured
 
 # Add/change the deployments here!
 DEPLOYMENTS = {
+    "gunaha": NotConfigured(),
+    "hello": ConnectTo("itw.altlab.dev").command("/opt/hello.altlab.dev/deploy"),
+    "itwewina": ConnectTo("itwewina@itw.altlab.dev").command(
+        "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
+    ),
     "korp-frontend-dev": ConnectTo("kor.altlab.dev").command(
         "/etc/docker/compose/korp/deploy"
     ),
     "korp-frontend-prod": ConnectTo("kor.altlab.dev").command(
         "/etc/docker/compose/korp-prod/deploy"
     ),
-    "itwewina": ConnectTo("itwewina@itw.altlab.dev").command(
-        "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
-    ),
+    "speech-db": NotConfigured(),
 }
 
 KEY_DIR = Path(__file__).parent / ".."

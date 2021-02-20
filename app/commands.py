@@ -5,9 +5,22 @@ What to do on a deploy.
 """
 
 from subprocess import check_call
+from abc import ABC, abstractmethod
 
 
-class ConnectTo:
+class Command:
+    """
+    Implements the commmand pattern.
+    """
+
+    @abstractmethod
+    def run(self) -> None:
+        """
+        This should complete the deployment.
+        """
+
+
+class ConnectTo(Command):
     """
     Connects to the given server via SSH, then runs the given command.
 
@@ -27,3 +40,8 @@ class ConnectTo:
 
     def run(self) -> None:
         check_call(["ssh", self.server_name, *self.command_args])
+
+
+class NotConfigured(Command):
+    def run(self) -> None:
+        raise NotImplementedError("Deployment not configured")
