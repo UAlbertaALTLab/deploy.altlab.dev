@@ -75,12 +75,13 @@ def deploy_app(app_name: str):
     ):
         return abort(HTTPStatus.UNAUTHORIZED)
 
-    logger.info(f"Accepted secret for {app_name}")
+    logger.info("%s: accepted secret", app_name)
 
     if command := DEPLOYMENTS.get(app_name):
         command.run()
-        logger.info("deployment done")
+        logger.info("%s: successfully redeployed", app_name)
         return "deploy script completed successfully"
+
     return "Secret accepted, but deploy mechanism not yet configured."
 
 
