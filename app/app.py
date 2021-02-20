@@ -3,27 +3,26 @@ import logging
 import os
 from pathlib import Path
 from subprocess import check_call
+from http import HTTPStatus
 
 from flask import Flask, request, abort
 
+KEY_DIR = Path(__file__).parent / ".."
+
+app = Flask(__name__)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 logger.addHandler(ch)
 
-logger.debug("flask started")
-
-app = Flask(__name__)
-
-KEY_DIR = Path(__file__).parent / '..'
 
 def get_app_secret(app_name: str) -> str:
     try:
         secret_key_file = KEY_DIR / (app_name + ".key")
         return secret_key_file.read_text()
     except FileNotFoundError:
-        return None
+        return ""
 
 
 @app.before_request
@@ -35,52 +34,54 @@ def fix_transfer_encoding():
     """
 
     transfer_encoding = request.headers.get("Transfer-Encoding", None)
-    if transfer_encoding == u"chunked":
+    if transfer_encoding == "chunked":
         request.environ["wsgi.input_terminated"] = True
 
 
-@app.route('/')
-def hello_world():
-   return "deploy.altlab.dev is running!"
-
-
-@app.route('/<app_name>', methods=["POST"])
-def secret_assert(app_name):
-    if '..' in app_name or '/' in app_name:
-        return abort(401)
+@app.route("/<app_name>", methods=["POST"])
+def deploy_app(app_name):
+    if ".." in app_name or "/" in app_name:
+        return abort(HTTPStatus.BAD_REQUEST)
 
     body = request.get_json()
     if not isinstance(body, dict):
-        return abort(401)
+        return abort(HTTPStatus.BAD_REQUEST)
 
-    provided_secret = body.get('secret', None)
+    provided_secret = body.get("secret", None)
     expected_secret = get_app_secret(app_name)
-    if expected_secret is None:
-        return abort(401)
+    if expected_secret == "":
+        return abort(HTTPStatus.NOT_FOUND)
 
     # constant-time compare with compare_digest; it accepts ASCII strings or
     # byte string, so encode to bytes to prevent TypeError
-    if not hmac.compare_digest(provided_secret.encode("UTF-8"), expected_secret.encode('UTF-8')):
-        return abort(401)
+    if not hmac.compare_digest(
+        provided_secret.encode("ASCII"), expected_secret.encode("ASCII")
+    ):
+        return abort(HTTPStatus.UNAUTHORIZED)
 
     logger.info(f"Accepted secret for {app_name}")
 
-    if app_name == 'korp-frontend-dev':
-        check_call(['ssh', 'kor.altlab.dev', '/etc/docker/compose/korp/deploy'])
+    if app_name == "korp-frontend-dev":
+        check_call(["ssh", "kor.altlab.dev", "/etc/docker/compose/korp/deploy"])
         logger.info("deployment done")
         return "deploy script completed successfully"
-    elif app_name == 'korp-frontend-prod':
-        check_call(['ssh', 'kor.altlab.dev', '/etc/docker/compose/korp-prod/deploy'])
+    elif app_name == "korp-frontend-prod":
+        check_call(["ssh", "kor.altlab.dev", "/etc/docker/compose/korp-prod/deploy"])
         logger.info("deployment done")
         return "deploy script completed successfully"
-    elif app_name == 'itwewina':
-        check_call(['ssh', 'itwewina@itw.altlab.dev', '/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy'])
+    elif app_name == "itwewina":
+        check_call(
+            [
+                "ssh",
+                "itwewina@itw.altlab.dev",
+                "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy",
+            ]
+        )
         logger.info("deployment done")
         return "deploy script completed successfully"
 
     return "Secret accepted, but deploy mechanism not yet configured.\n"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
-
