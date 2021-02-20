@@ -40,6 +40,8 @@ def fix_transfer_encoding():
 
 @app.route("/<app_name>", methods=["POST"])
 def deploy_app(app_name):
+    # Attempt to prevent a path traversal attack:
+    # (See: https://owasp.org/www-community/attacks/Path_Traversal)
     if ".." in app_name or "/" in app_name:
         return abort(HTTPStatus.BAD_REQUEST)
 

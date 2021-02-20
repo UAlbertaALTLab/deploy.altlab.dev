@@ -4,3 +4,4 @@
 *.key
 # example.key is included for testing purpose
 !example.key
+__pycache__/
