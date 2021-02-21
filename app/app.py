@@ -65,7 +65,8 @@ def deploy_app(app_name: str):
 
     logger.info("%s: accepted secret", app_name)
 
-    if command := DEPLOYMENTS.get(app_name):
+    command = DEPLOYMENTS.get(app_name)
+    if command is not None:
         command.run()
         logger.info("%s: successfully redeployed", app_name)
         return "deploy script completed successfully"
