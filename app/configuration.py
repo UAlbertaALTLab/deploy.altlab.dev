@@ -3,8 +3,10 @@ Add and configure the deployments here!
 
 To add an app called {app_name}:
 
- 1. sudo python3 generate-key.py {app_name}
- 2. add key here: "{app_name}": ConnectTo("server").command("/path/to/redeployment-script")
+ 1. In the parent directory generate a secret key for {app_name}:
+    sudo python3 generate-key.py {app_name}
+ 2. Add a line like this to DEPLOYMENTS:
+    "{app_name}": ConnectTo("server").command("/path/to/redeployment-script"),
 
 """
 
