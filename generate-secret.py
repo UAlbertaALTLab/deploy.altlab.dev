@@ -1,41 +1,63 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
 """
+Generates a secret key called <app-name>.key.
+
 Usage:
 
-    generate-secret.py <app-name>
-
-Generates a secret key called <app-name>.key.
+    ./generate-secret.py <app-name>
 """
 
-import sys
+import argparse
 import secrets
-from pathlib import Path
 import shutil
-import logging
-
-logger = logging.getLogger(__name__)
-
-app_name = Path("redeploy", sys.argv[1])
-# assert app_name.exists()
+from pathlib import Path
 
 
-key_file = Path(sys.argv[1]+ ".key")
+DEFAULT_USER = "deploy"
 
-key_file.write_text(secrets.token_urlsafe())
+here = Path(__file__).parent
+
+parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+parser.add_argument(
+    "app_name",
+    metavar="app-name",
+    help="name of the app you want to deploy; "
+    "must match a key in DEPLOYMENTS in app/configuration.py",
+)
+parser.add_argument(
+    "-u",
+    "--user",
+    default=DEFAULT_USER,
+    help=f"owner of the key [default: {DEFAULT_USER}]",
+)
+parser.add_argument(
+    "-g",
+    "--group",
+    default=DEFAULT_USER,
+    help=f"group of the key [default: {DEFAULT_USER}]",
+)
+args = parser.parse_args()
+
+key_file = here / f"{args.app_name}.key"
+
+
+OWNER_ONLY_READ_WRITE = 0o600
+OWNER_READ_ONLY = 0o400
 
 try:
-    shutil.chown(key_file, user="deploy", group="deploy")
-except LookupError as e:
-    # docs.python.org says shutil.chown is only available to Unix as of python 3.6
-    # when it's tried on Windows, it always throws LookupError with message "no such user: 'xxx' "
-    # even if xxx is a legitimate user on Windows
+    # Make sure the file is CREATED as only read/writable to the owner
+    # (like an ssh key)
+    key_file.touch(mode=OWNER_ONLY_READ_WRITE, exist_ok=False)
+except FileExistsError:
+    print(f"{key_file} exists! not overwriting")
+    exit(1)
 
-    # todo: figure out what's necessary on Windows.
-    #   However since redeploy is very possibly to be used on Linux servers, this hardly matters.
-    logger.error(e)
-    logger.error("Failed to change the owner of key file to deploy."
-                 "Key file is created anyways.")
+key_file.write_text(secrets.token_urlsafe())
+key_file.chmod(OWNER_READ_ONLY)
+shutil.chown(key_file, user=args.user, group=args.group)
 
-key_file.chmod(0o400)
+assert key_file.owner() == args.user
+assert key_file.group() == args.group
+assert key_file.stat().st_mode & 0o777 == OWNER_READ_ONLY
