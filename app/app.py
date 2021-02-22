@@ -59,7 +59,7 @@ def deploy_app(app_name: str):
     # constant-time compare with compare_digest; it accepts ASCII strings or
     # byte string, so encode to bytes to prevent TypeError
     if not hmac.compare_digest(
-        provided_secret.encode("ASCII"), expected_secret.encode("ASCII")
+        provided_secret.encode("UTF-8"), expected_secret.encode("UTF-8")
     ):
         return abort(HTTPStatus.UNAUTHORIZED)
 
