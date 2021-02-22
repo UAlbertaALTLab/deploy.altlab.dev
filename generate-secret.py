@@ -41,6 +41,23 @@ parser.add_argument(
 args = parser.parse_args()
 
 key_file = here / f"{args.app_name}.key"
+
+
+OWNER_ONLY_READ_WRITE = 0o600
+OWNER_READ_ONLY = 0o400
+
+try:
+    # Make sure the file is CREATED as only read/writable to the owner
+    # (like an ssh key)
+    key_file.touch(mode=OWNER_ONLY_READ_WRITE, exist_ok=False)
+except FileExistsError:
+    print(f"{key_file} exists! not overwriting")
+    exit(1)
+
 key_file.write_text(secrets.token_urlsafe())
+key_file.chmod(OWNER_READ_ONLY)
 shutil.chown(key_file, user=args.user, group=args.group)
-key_file.chmod(0o400)
+
+assert key_file.owner() == args.user
+assert key_file.group() == args.group
+assert key_file.stat().st_mode & 0o777 == OWNER_READ_ONLY
