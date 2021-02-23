@@ -1,20 +1,28 @@
 # deploy.altlab.dev
-Enables web application redeployment via HTTPS.
 
-## How deployment works
+ALTLab's deployment server. Enables web application redeployment via HTTPS.
 
-When a developer pushes to the default branch of one of our apps (e.g.,
-gunaha), it starts a few GitHub workflows that build a Docker image of
-the application; later, this app, <https://deploy.altlab.dev/> is used
-to pull the image and redeploy the application in our private network:
+## Deployment Process
+
+1. A developer pushes to the default branch of one of our apps (e.g. gunaha, [itwêwina][itwewina]).
+1. A GitHub Action workflow is triggered that builds a Docker image of the application.
+1. The GitHub Action workflow then sends a POST request to a webhook at `deploy.altlab.dev` (this app). (See the [API docs](./docs/API.md).)
+1. This app pulls the Docker image for that application and redeploys it in ALTLab's private network.
 
 ![Sequence diagram of our deployment process](./docs/Deployment.svg)
 
-## How to configure the servers
+## Documentation
 
-Please see [How to configure the servers](./docs/how-to-configure-the-servers.md).
+* [API](./docs/API.md)
+* [How to register an application with the API](./registration.md)
+* [How to configure the servers](./docs/server-config.md)
 
-## Notes about the production environment
+## Notes
 
-The docker service should restart all running containers when restarted. See <https://stackoverflow.com/a/18797089/6626414>
+* The docker service should restart all running containers when restarted. See <https://stackoverflow.com/a/18797089/6626414>.
+* You can monitor the logs in `deploy.gunicorn`:
+  - `sudo journalctl -lfu deploy.gunicorn`
+  - `sudo journalctl -lu deploy.gunicorn --since='15m'` (last 15 minutes)
 
+<!-- Links -->
+[itwewina]: https://itwewina.altlab.app/
