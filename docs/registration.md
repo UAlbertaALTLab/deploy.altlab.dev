@@ -10,7 +10,7 @@ To register an ALTLab application with the deployment server:
 1. Generate a secret key for the app: `sudo python3 generate-secret.py {app_name}`.
 1. This will create a key file at `{app_name}.key`. Use this key as the app secret when sending a POST request to that app's endpoint. (See the [API][] notes.)
 1. Update [`app/configuration.py`][config] by adding code to run the deployment script for the app.
-1. Update [`docs/application-registry.tsv`][regitry] by adding the name, ports, and UID/GID for your application.
+1. Update [`docs/application-registry.tsv`][registry] by adding the name, ports, and UID/GID for your application.
 
 [config]: ../app/configuration.py
 [registry]: ./application-registry.tsv
@@ -18,7 +18,8 @@ To register an ALTLab application with the deployment server:
 
 ## Existing applications
 
-The [application registry][registry] contains the following fields:
+The [application registry][registry] is a spreadsheet that contains the
+following fields:
 
 ### Application
 
