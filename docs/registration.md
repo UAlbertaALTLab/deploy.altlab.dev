@@ -14,7 +14,7 @@ To register an ALTLab application with the deployment server:
 
 [config]: ../app/configuration.py
 [registry]: ./application-registry.tsv
-[API]: ./api.md
+[API]: ./API.md
 
 ## Existing applications
 
