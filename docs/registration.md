@@ -23,7 +23,7 @@ following fields:
 
 ### Application
 
-The is the `{app_name}`.
+This is the `{app_name}` as registered in [`app/configuration.py`][config].
 
 ### UID/GID
 
