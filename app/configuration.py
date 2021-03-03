@@ -29,7 +29,6 @@ DEPLOYMENTS = {
     "korp-frontend-prod": ConnectTo("kor.altlab.dev").command(
         "/etc/docker/compose/korp-prod/deploy"
     ),
-    ############################ recordings.altlab.dev ##############################
-    # TODO: configure the SpeechDB for deployment
-    "speech-db": NotConfigured(),
+    ############################ speech-db.altlab.app ##############################
+    "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
 }
