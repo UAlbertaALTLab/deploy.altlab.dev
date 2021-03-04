@@ -17,5 +17,12 @@ ALTLab's deployment server. Enables web application redeployment via HTTPS.
 * [How to register an application with the API](./registration.md)
 * [How to configure the servers](./docs/server-config.md)
 
+## How to check the logs
+
+Use `journalctl` to monitor the logs for `deploy.altlab.dev`:
+
+ - `sudo journalctl -lf -u deploy.altlab.dev` (follow mode)
+ - `sudo journalctl -l -u deploy.altlab.dev --since='15m'` (last 15 minutes)
+
 <!-- Links -->
 [itwewina]: https://itwewina.altlab.app/
