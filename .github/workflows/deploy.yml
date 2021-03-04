@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: send HTTP request to deploy.altlab.dev
+      run: >-
+        curl -X POST https://deploy.altlab.dev/deploy --fail
+        -d '{ "secret": "${{ secrets.DEPLOY_ALTLAB_DEV_DEPLOY_KEY }}" }'
+        -H 'Content-Type: application/json'
