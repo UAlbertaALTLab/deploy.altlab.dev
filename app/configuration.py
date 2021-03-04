@@ -10,7 +10,7 @@ To add an app called {app_name}:
 
 """
 
-from .commands import ConnectTo, NotConfigured
+from .commands import ConnectTo, NotConfigured, RedeploySelf
 
 DEPLOYMENTS = {
     ############################## gunaha.altlab.app ################################
@@ -31,4 +31,6 @@ DEPLOYMENTS = {
     ),
     ############################ speech-db.altlab.app ##############################
     "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
+    ############################## deploy.altlab.dev ###############################
+    "deploy": RedeploySelf(),
 }

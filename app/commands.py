@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 What to do on a deploy.
 """
@@ -45,3 +43,29 @@ class ConnectTo(Command):
 class NotConfigured(Command):
     def run(self) -> None:
         raise NotImplementedError("Deployment not configured")
+
+
+class RedeploySelf(Command):
+    """
+    How deploy.altlab.app re-deploys *itself*.
+    """
+
+    # This is how this app assumes it's configured:
+    #
+    #  - It can `git pull` itself
+    #  - It has a systemd unit file (service) that manages it.
+    #  - The unit file has ExecReload configured to gracefully reload the app.
+    #  - The user running the code can issue the systemd reload command to itself.
+
+    # systemd unit name. Check /etc/systemd/system!
+    UNIT_NAME = "deploy.altlab.dev"
+
+    def run(self) -> None:
+        check_call(["git", "pull", "--ff-only"])
+        # Note: Make sure the user running this app is allowed to run this command
+        # without a password. Add something like this to the sudoers file:
+        #
+        #     deploy ALL=(ALL) NOPASSWD: /bin/systemctl reload UNIT_NAME
+        #
+        # See: https://toroid.org/sudoers-syntax
+        check_call(["sudo", "systemctl", "reload", self.UNIT_NAME])
