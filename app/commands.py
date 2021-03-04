@@ -65,7 +65,7 @@ class RedeploySelf(Command):
         # Note: Make sure the user running this app is allowed to run this command
         # without a password. Add something like this to the sudoers file:
         #
-        #     deploy ALL=(ALL) NOPASSWD: /bin/systemd reload UNIT_NAME
+        #     deploy ALL=(ALL) NOPASSWD: /bin/systemctl reload UNIT_NAME
         #
         # See: https://toroid.org/sudoers-syntax
-        check_call(["sudo", "systemd", "reload", self.UNIT_NAME])
+        check_call(["sudo", "systemctl", "reload", self.UNIT_NAME])
