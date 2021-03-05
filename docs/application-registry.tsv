@@ -1,9 +1,9 @@
 Application	UID/GID	Listening on...	Notes
-speech-db	60004	altlab-itw:8004
-itwewina	60002	altlab-itw:8001
-gunaha	60001	altlab-itw:8000
-hello	N/A	altlab-itw:5000
-deploy	996	altlab.dev:2020
-lfs	60421	altlab-gw:6421
+speech-db	60004	altlab-itw:8004	
+itwewina	60002	altlab-itw:8001	
+gunaha	60001	altlab-itw:8000	
+hello	N/A	altlab-itw:5000	
+deploy	996	altlab-gw:2020	Port bound to 127.0.0.1 ONLY!
+lfs	60421	altlab-gw:6421	
 lfs	60421	6422	used by docker-compose for tests: ssh server
 lfs	60421	6428	used by docker-compose for tests: http server
