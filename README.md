@@ -14,7 +14,7 @@ ALTLab's deployment server. Enables web application redeployment via HTTPS.
 ## Documentation
 
 * [API](./docs/API.md)
-* [How to register an application with the API](./registration.md)
+* [How to register an application with the API](./docs/registration.md)
 * [How to configure the servers](./docs/server-config.md)
 
 ## How to check the logs
