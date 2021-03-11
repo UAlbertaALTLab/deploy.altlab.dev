@@ -7,4 +7,4 @@ bind = "127.0.0.1:2020"
 #  - collecting and post-processing static assets
 #  - etc.
 # So wait a long time before giving up!
-timeout = 240
+timeout = 600
