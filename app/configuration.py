@@ -30,7 +30,7 @@ DEPLOYMENTS = {
         "/etc/docker/compose/korp-prod/deploy"
     ),
     ############################ speech-db.altlab.app ##############################
-    "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
+    "speech-db": ConnectTo("speech-db@kor.altlab.dev").command("/home/speech-db/recording-validation-interface/deploy"),
     ############################## deploy.altlab.dev ###############################
     "deploy": RedeploySelf(),
 }
