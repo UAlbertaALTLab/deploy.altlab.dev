@@ -1,5 +1,5 @@
 Application	UID/GID	Listening on...	Notes
-speech-db	60004	altlab-kor:8004	
+speech-db	60004	altlab-itw:8004	
 itwewina	60002	altlab-kor:8001	
 itwewina	60002	altlab-kor:9191	uwsgi stats monitor; use uwsgitop to inspect the live server!
 gunaha	60001	altlab-itw:8000	
