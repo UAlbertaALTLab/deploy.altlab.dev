@@ -1,7 +1,7 @@
 Application	UID/GID	Listening on...	Notes
 speech-db	60004	altlab-itw:8004	
-itwewina	60002	altlab-kor:8001	
-itwewina	60002	altlab-kor:9191	uwsgi stats monitor; use uwsgitop to inspect the live server!
+itwewina	60002	altlab-itw:8001	
+itwewina	60002	altlab-itw:9191	uwsgi stats monitor; use uwsgitop to inspect the live server!
 gunaha	60001	altlab-itw:8000	
 hello	N/A	altlab-itw:5000	
 deploy	996	altlab-gw:2020	Port bound to 127.0.0.1 ONLY!
