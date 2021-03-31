@@ -19,8 +19,8 @@ DEPLOYMENTS = {
     ############################### hello.altlab.dev ###############################
     "hello": ConnectTo("itw.altlab.dev").command("/opt/hello.altlab.dev/deploy"),
     ############################# itwewina.altlab.app ##############################
-    "itwewina": ConnectTo("itwewina@kor.altlab.dev").command(
-        "/home/itwewina/cree-intelligent-dictionary/docker/deploy"
+    "itwewina": ConnectTo("itwewina@itw.altlab.dev").command(
+        "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
     ),
     ##################################### Korp #####################################
     "korp-frontend-dev": ConnectTo("kor.altlab.dev").command(
