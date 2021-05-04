@@ -23,11 +23,8 @@ DEPLOYMENTS = {
         "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
     ),
     ##################################### Korp #####################################
-    "korp-frontend-dev": ConnectTo("kor.altlab.dev").command(
-        "/etc/docker/compose/korp/deploy"
-    ),
-    "korp-frontend-prod": ConnectTo("kor.altlab.dev").command(
-        "/etc/docker/compose/korp-prod/deploy"
+    "korp-frontend": ConnectTo("korp@itw.altlab.dev").command(
+        "/data_local/home/korp/docker-compose/deploy"
     ),
     ############################ speech-db.altlab.app ##############################
     "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
