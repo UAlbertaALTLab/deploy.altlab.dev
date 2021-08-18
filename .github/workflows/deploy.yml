@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-20.04
+    if: github.repository_owner == 'UAlbertaALTLab'
 
     steps:
     - name: send HTTP request to deploy.altlab.dev

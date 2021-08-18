@@ -13,21 +13,21 @@ To add an app called {app_name}:
 from .commands import ConnectTo, NotConfigured, RedeploySelf
 
 DEPLOYMENTS = {
-    ############################## gunaha.altlab.app ################################
+    # gunaha.altlab.app
     # TODO: configure Gunaha (Tsuut'ina dictionary) for deployment
     "gunaha": NotConfigured(),
-    ############################### hello.altlab.dev ###############################
+    # hello.altlab.dev
     "hello": ConnectTo("itw.altlab.dev").command("/opt/hello.altlab.dev/deploy"),
-    ############################# itwewina.altlab.app ##############################
-    "itwewina": ConnectTo("itwewina@itw.altlab.dev").command(
-        "/opt/docker-compose/itwewina/cree-intelligent-dictionary/docker/deploy"
+    # morphodict: itwewina, {itwiwina,gunaha,srseng}.altlab.dev
+    "itwewina": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict/docker/deploy"
     ),
-    ##################################### Korp #####################################
+    # Korp
     "korp-frontend": ConnectTo("korp@itw.altlab.dev").command(
         "/data_local/home/korp/docker-compose/deploy"
     ),
-    ############################ speech-db.altlab.app ##############################
+    # speech-db.altlab.app
     "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
-    ############################## deploy.altlab.dev ###############################
+    # deploy.altlab.dev
     "deploy": RedeploySelf(),
 }
