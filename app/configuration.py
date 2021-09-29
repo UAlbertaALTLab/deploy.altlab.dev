@@ -28,6 +28,8 @@ DEPLOYMENTS = {
     ),
     # speech-db.altlab.app
     "speech-db": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db/deploy"),
+    # speech-db.altlab.dev
+    "speech-db-dev": ConnectTo("speech-db@itw.altlab.dev").command("/opt/speech-db-dev/deploy"),
     # deploy.altlab.dev
     "deploy": RedeploySelf(),
 }
