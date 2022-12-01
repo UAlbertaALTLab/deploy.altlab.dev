@@ -22,6 +22,12 @@ DEPLOYMENTS = {
     "itwewina": ConnectTo("morphodict@itw.altlab.dev").command(
         "/opt/morphodict/home/morphodict/docker/deploy"
     ),
+    "itwewina-backend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/refactor/morphodict-backend/docker/deploy"
+    ),
+    "itwewina-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/refactor/morphodict-frontend/docker/deploy"
+    ),
     # Korp
     "korp-frontend": ConnectTo("korp@itw.altlab.dev").command(
         "/data_local/home/korp/docker-compose/deploy"
