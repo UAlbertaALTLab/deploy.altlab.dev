@@ -11,7 +11,7 @@ lfs	60421	altlab-gw:6421
 lfs	60421	6422	used by docker-compose for tests: ssh server
 lfs	60421	6428	used by docker-compose for tests: http server
 morphodict	60006		The morphodict user has access to the docker API.
-morphodict-crkeng	60007	altlab-itw:8011	http. The morphodict-run user inside the container has a different UID to prevent docker API access.	
+morphodict-crkeng	60007	altlab-itw:8011	http. The morphodict-run user inside the container has a different UID to prevent docker API access.
 morphodict-crkeng	60007	altlab-itw:9011	uwsgi stats monitor
 morphodict-cwdeng	60007	altlab-itw:8012	http
 morphodict-cwdeng	60007	altlab-itw:9012	uwsgi stats monitor
@@ -20,7 +20,7 @@ morphodict-srseng	60007	altlab-itw:9013	uwsgi stats monitor
 morphodict-arpeng	60007	altlab-itw:8014	http
 morphodict-arpeng	60007	altlab-itw:9014	uwsgi stats monitor
 api.itwewina.dev	60007	altlab-itw:8003	http
-api.itwiwina.dev  	60007	altlab-itw:8005	http
+api.itwiwina.dev	60007	altlab-itw:8005	http
 api.nihiitono.dev	60007	altlab-itw:8007	http
 api.gunaha.dev	60007	altlab-itw:8009	http
 api.guusaaw.dev	60007	altlab-itw:8010	http
