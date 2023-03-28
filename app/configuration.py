@@ -22,11 +22,29 @@ DEPLOYMENTS = {
     "itwewina": ConnectTo("morphodict@itw.altlab.dev").command(
         "/opt/morphodict/home/morphodict/docker/deploy"
     ),
-    "itwewina-backend": ConnectTo("morphodict@itw.altlab.dev").command(
-        "/opt/morphodict/home/refactor/morphodict-backend/docker/deploy"
+    # morphodict api: api.{itwewina, gunaha, itwiwina, arapaho, guusaaw}.altlab.dev
+    "morphodict-backend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-backend/docker/deploy"
     ),
-    "itwewina-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
-        "/opt/morphodict/home/refactor/morphodict-frontend/docker/deploy"
+    # itwewina front-end
+    "crkeng-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-frontend/crkeng/docker/deploy"
+    ),
+    # itwiwina front-end
+    "cwdeng-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-frontend/cwdeng/docker/deploy"
+    ),
+    # gunaha front-end
+    "srseng-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-frontend/srseng/docker/deploy"
+    ),
+    # guusaaw front-end
+    "hdneng-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-frontend/hdneng/docker/deploy"
+    ),
+    # arapaho front-end
+    "arpeng-frontend": ConnectTo("morphodict@itw.altlab.dev").command(
+        "/opt/morphodict/home/morphodict-frontend/arpeng/docker/deploy"
     ),
     # Korp
     "korp-frontend": ConnectTo("korp@itw.altlab.dev").command(
