@@ -19,6 +19,8 @@ morphodict-srseng	60007	altlab-itw:8013	http
 morphodict-srseng	60007	altlab-itw:9013	uwsgi stats monitor
 morphodict-arpeng	60007	altlab-itw:8014	http
 morphodict-arpeng	60007	altlab-itw:9014	uwsgi stats monitor
+morphodict-blaeng	60007	altlab-itw:8017 http
+morphodict-blaeng	60007	altlab-itw:9017 uwsgi stats monitor
 api.itwewina.dev	60007	altlab-itw:8003	http
 api.itwiwina.dev	60007	altlab-itw:8005	http
 api.nihiitono.dev	60007	altlab-itw:8007	http
